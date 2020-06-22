@@ -75,3 +75,4 @@ def extract_pdfs(list):  # You can easily extract a list from a .csv with pandas
     df = df.iloc[1:]
     df.to_csv('files.csv', index=False)
     os.remove('pdfs_mined_so_far.csv')  # Deletes the safety copy, for it is no longer needed.
+    return df
