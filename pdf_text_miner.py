@@ -34,7 +34,7 @@ def extract_pdfs(list):  # You can easily extract a list from a .csv with pandas
 
     for pdf in list:
         ext = os.path.splitext(pdf)[1][1:].strip()  # Gets file extension.
-        if ext == 'pdf':  # Guarantees that file is a .pdf, otherwise the program will crash when extracting text.
+        if ext == 'pdf':  # Guarantees that the file is a .pdf, otherwise the program will crash when extracting text.
             ocr = False
             name = pdf.split('.pdf')[0]
             doc = fitz.open(f"{name}.pdf")
@@ -74,4 +74,4 @@ def extract_pdfs(list):  # You can easily extract a list from a .csv with pandas
                 f"Finished {name} at {end}. OCR = {ocr}. {count} files read. {round(count * 100 / len(list), 2)}% done.")
     df = df.iloc[1:]
     df.to_csv('files.csv', index=False)
-    os.remove('pdfs_mined_so_far.csv')  # Deletes tbe safety copy, for it is no longer needed.
+    os.remove('pdfs_mined_so_far.csv')  # Deletes the safety copy, for it is no longer needed.
