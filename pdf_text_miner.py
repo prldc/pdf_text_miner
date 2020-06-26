@@ -16,7 +16,7 @@ def get_pdfs():
     directory = list(os.listdir())
 
     for file in directory:
-        ext = os.path.splitext(file)[1][1:].strip()
+        ext = os.path.splitext(file)[1][1:].strip()  # Gets file extension.
         if ext == 'pdf':
             pdfs.append(file)
     safe_copy = pd.DataFrame(pdfs, columns=['files'])
@@ -40,7 +40,7 @@ def extract_pdfs(list):  # You can easily extract a list from a .csv with pandas
             doc = fitz.open(f"{name}.pdf")
             text_file = open(f"{name}.txt", 'w')
             number_of_pages = doc.pageCount
-            for page_n in range(number_of_pages):
+            for page_n in range(number_of_pages):  # Extracts text from each page.
                 page = doc.loadPage(page_n)
                 page_content = page.getText("text")
                 text_file.write(page_content)
@@ -51,14 +51,14 @@ def extract_pdfs(list):  # You can easily extract a list from a .csv with pandas
                 tess_file = f"{name}.pdf"
                 pages = convert_from_path(tess_file, 500)
                 image_counter = 1
-                for page in pages:
+                for page in pages:  # Converts the PDF to image.
                     filename = f"{name}page_{str(image_counter)}.jpg"
                     page.save(filename, 'JPEG')
                     image_counter = image_counter + 1
                 filelimit = image_counter - 1
                 outfile = f"{name}.txt"
                 f = open(outfile, "a")
-                for i in range(1, filelimit + 1):
+                for i in range(1, filelimit + 1):  # Applies OCR to each image, saves text file.
                     filename = f"{name}page_{str(i)}.jpg"
                     text = str((pytesseract.image_to_string(Image.open(filename), lang="por")))
                     text = text.replace('-\n', '')
@@ -73,6 +73,6 @@ def extract_pdfs(list):  # You can easily extract a list from a .csv with pandas
             print(
                 f"Finished {name} at {end}. OCR = {ocr}. {count} files read. {round(count * 100 / len(list), 2)}% done.")
     df = df.iloc[1:]
-    df.to_csv('files.csv', index=False)
-    os.remove('pdfs_mined_so_far.csv')  # Deletes the safety copy, for it is no longer needed.
+    df.to_csv('files.csv', index=False)  # Outputs spreadsheet.
+    os.remove('pdfs_mined_so_far.csv')  # Deletes the redundant copy.
     return df
